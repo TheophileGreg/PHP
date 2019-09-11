@@ -1,5 +1,6 @@
 <?php
 	require_once("Model.php");
+	require_once '../TD1/voiture.php';
 
 	$rep = Model::$pdo->query('SELECT * FROM Voiture');
 
