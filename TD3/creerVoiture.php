@@ -1,0 +1,17 @@
+<?php
+require_once("./Voiture.php");
+
+if (empty($_POST)){
+    echo"Le tableau est vide, les paramètres n'ont pas bien étés passés";
+}
+else{
+    $voiture1 = new Voiture($_POST['marque'], $_POST['couleur'], $_POST['immatriculation']);
+
+
+    $voiture1->afficher();
+    $voiture1->save();
+}
+
+
+
+?>

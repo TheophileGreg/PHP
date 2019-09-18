@@ -45,16 +45,52 @@ class Voiture {
     $this->immatriculation = $i;
   }
 }
+
+public static function getVoitureByImmat($immat) {
+    $sql = "SELECT * from Voiture WHERE immatriculation=:nom_tag";
+    // Préparation de la requête
+    $req_prep = Model::$pdo->prepare($sql);
+
+    $values = array(
+        "nom_tag" => $immat,
+        //nomdutag => valeur, ...
+    );
+    // On donne les valeurs et on exécute la requête   
+    $req_prep->execute($values);
+
+    // On récupère les résultats comme précédemment
+    $req_prep->setFetchMode(PDO::FETCH_CLASS, 'Voiture');
+    $tab_voit = $req_prep->fetchAll();
+    // Attention, si il n'y a pas de résultats, on renvoie false
+    if (empty($tab_voit))
+        return false;
+    return $tab_voit[0];
+}
            
   // une methode d'affichage.
   public function afficher() {
     echo "La voiture est de marque " . $this->marque . " de couleur " . $this->couleur . " et est immatriculé " . $this->immatriculation;
   }
 
+  public function save(){
+    $sql = "INSERT INTO Voiture (immatriculation, marque, couleur) VALUES (:immatriculation,:marque, :couleur)";
+    $req_prep = Model::$pdo->prepare($sql);
+
+    $values = array(
+        "marque" => $this->marque,
+        "immatriculation" => $this->immatriculation,
+        "couleur"=> $this->couleur,
+        //nomdutag => valeur, ...
+    );
+    // On donne les valeurs et on exécute la requête   
+    $req_prep->execute($values);
+
+  }
+
   public static function getAllVoitures(){
 
 
-    $rep = Model::$pdo->query('SELECT * FROM voiture');
+    $rep = Model::$pdo->query('SELECT * FROM Voiture');
 
     $tab_obj = $rep->setFetchMode(PDO::FETCH_CLASS, 'Voiture');
     $tab_voit = $rep->fetchAll();
